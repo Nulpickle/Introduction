@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>cmd</title>
+  <style>
+    body {
+      background-color: black;
+      color: rgb(0, 255, 0);
+      font-family: monospace;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #terminal {
+      height: 100vh;
+      padding: 10px;
+      box-sizing: border-box;
+      overflow-y: scroll; 
+    }
+
+    #output {
+      margin: 0;
+      padding: 0;
+    }
+
+    #input-container {
+      display: flex;
+      align-items: baseline;
+    }
+
+    #user-identifier {
+      margin-right: 5px;
+    }
+
+    #input {
+      border: none;
+      outline: none;
+      background: transparent;
+      color: rgb(0, 255, 0);
+      font-family: monospace;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="terminal">
+    <div id="output-container">
+      <pre id="output"></pre>
+    </div>
+    <div id="input-container">
+      <div id="user-identifier"></div>
+      <input id="input" type="text" autocomplete="off" spellcheck="false">
+    </div>
+  </div>
+  <script>
+    const terminal = document.getElementById('terminal');
+    const input = document.getElementById('input');
+    const output = document.getElementById('output');
+    let currentDirectory = '/';
+    const homeDirectory = '/';
+    const directoryStructure = {
+      '/': ['qna.txt', 'contact.txt', 'readme.txt', 'classified_documents_i_stole', 'bird_drone_footage'],
+      '/classified_documents_i_stole/': ['green.txt', 'coollinks.txt'],
+      '/xbox360_chatlogs/': []
+    };
+
+    function updatePrompt() {
+      document.getElementById('user-identifier').textContent = `sysadmin@fbi.gov:~${currentDirectory}$`;
+    }
+
+    function clearTerminal() {
+      
+      output.innerHTML = '';
+    }
+
+    function listFiles() {
+      const files = directoryStructure[currentDirectory];
+      if (files) {
+        output.innerHTML += `${files.join('  ')}\n`;
+      } else {
+        output.innerHTML += 'No such directory\n';
+      }
+    }
+
+    function catFile(filename) {
+      if (filename === 'about.txt') {
+        output.innerHTML += ' \n \n Hello\n my name is soup, \n im a 16 year old Underground Hacker\n I frequently explore the dark realms hacking forums\n what pushes me deeper is the toxic culture prevalent on the hacking forums and how uncensored it truly is \n My weapon of choice is Python, but i am currently learning C to add a low-level language to my skill set\n I have a passion for learning hacking concepts, where it takes precedence over much of my life \n  └─(note: due to my really bad ADHD i have the attention span of a golden retriever) \n I often browse 4chan as a hobby, my favorite boards being /pol/ and /b/ If you\'re wondering \n What i  enjoy the most is pushing the boundaries of the cyberspace, \n it\'s a realm of endless possibilities \n A realm where classified documents are waiting for me,\n A realm where all corners of cyberspace are simultaneously exposed and concealed. \n \n';
+      } else if (filename === 'contact.txt') {
+        output.innerHTML += '\n \n you can contact me at: \n \n simsoup@proton.me \n \n';
+      } else if (filename === 'qna.txt') {
+        output.innerHTML += '\n \n Q: when did you start hacking? \n \n A: i started about a year ago \n \n Q: What motivates you to hack into computer systems / networks? \n \n A: CHAOS i wanna create chaos i have no incentive for financial gain (yet) \n \n Q: Are there any specific hacking tools/software you prefer to use? \n \n A: i run kali for convenice i would run arch but its to much of a pain to port all the hacking tools that kali has over \n \n Q: How do i get my start in hacking? \n \n A: Learn NMAP and Linux commands those 2 things are the building blocks of most attacks used \n \n Q: How do you justify the ethics of hacking when it often involves less then legal activities? \n \n A: Depends but i know most big companies have hacking insurance \n \n Q: what person or groups inspired you to get into hacking?\n \n A: Lulzsec with the story of Albert Gonzalez being that push over the edge\n \n ';
+      } else if (filename === 'green.txt') {
+        output.innerHTML += '\n \n >be me\n >worlds greatest hacker\n >#1 on FBIs most wanted\n >but they cant track me down becuase i allways delete my browser history \n >just got done hacking the entire internet \n >now every user in the world gets redirected to blackpeoplemeet.com \n >epic lulz \n >one of my hackerbros messages me on AIM \n >tells me 420_1337_h4x0r_420 my #1 hackerbro has been arrested \n >they were able to backtrace his IP because he forgot to browse in incognito mode \n >word on the street is hes allready ratted me out \n >look out window \n >FBI helicopter circling overhead \n >hah! those bastards dont know who theyre dealing with \n >open up internet explorer \n >get redirected to blackpeoplemeet.com \n >oh yeah forgot about that \n >run disableblackpeoplemeet.exe \n >now its time for some world class hacking \n >go to fbi.gov/hack \n >fuck theres a password \n >something appears on the bottom right of my screen \n >its that goddamn talking paperclip \n >it looks like your trying to hack the FBI would you like help? \n >fuck off clippy im trying to work here \n >it looks like your trying to hack the FBI would you- \n >click the little fucker just to make him shut up \n >clippy gives me the password \n >guess hes not so bad after all \n >now that im in i go to fbi.gov/hack/helicopters \n >Congratulations hacker you have full control of the FBIs Helicopters! what would you like to do \n >A) turn left B) turn right C) ascend D) descend E) Explode\n >go with option E\n >BOOM baby \n >flaming helicopters fall from the sky\n >mfw \n \n';
+      } else if (filename === 'coollinks.txt') {
+        output.innerHTML += '\n | rf.to [seized] \n | breached.vc [seized] \n | 4chan.org/pol/ [family friendly discussion board about christianity] \n | fbi.gov [honeypot] \n | cat-bounce.com [CAT BOUNCE!!!!! (^ >ヮ<^)]\n\n';
+      } else {
+        output.innerHTML += `cat: ${filename}: No such file or directory\n`;
+      }
+    }
+
+    function changeDirectory(dirname) {
+      if (dirname === 'xbox360_chatlogs') {
+        output.innerHTML += '<span style="color: red; font-weight: bold;"> [ACCESS DENIED] \n [REASON: CONTAINS UNETHICAL MATERIAL ]</span>\n';
+      } else if (dirname === '../') {
+        currentDirectory = homeDirectory;
+        updatePrompt();
+      } else {
+        const newDir = `${currentDirectory}${dirname}/`;
+        if (directoryStructure[newDir]) {
+          currentDirectory = newDir;
+          updatePrompt();
+        } else {
+          output.innerHTML += `cd: ${dirname}: No such directory\n`;
+        }
+      }
+    }
+
+    function neofetchCommand() {
+      const asciiArt = `
+⠀⠀⠀⠀⠀⣀⣠⠤⠶⠶⣖⡛⠛⠿⠿⠯⠭⠍⠉⣉⠛⠚⠛⠲⣄⠀⠀⠀⠀⠀
+⠀⠀⢀⡴⠋⠁⠀⡉⠁⢐⣒⠒⠈⠁⠀⠀⠀⠈⠁⢂⢅⡂⠀⠀⠘⣧⠀⠀⠀⠀
+⠀⠀⣼⠀⠀⠀⠁⠀⠀⠀⠂⠀⠀⠀⠀⢀⣀⣤⣤⣄⡈⠈⠀⠀⠀⠘⣇⠀⠀⠀
+⢠⡾⠡⠄⠀⠀⠾⠿⠿⣷⣦⣤⠀⠀⣾⣋⡤⠿⠿⠿⠿⠆⠠⢀⣀⡒⠼⢷⣄⠀
+⣿⠊⠊⠶⠶⢦⣄⡄⠀⢀⣿⠀⠀⠀⠈⠁⠀⠀⠙⠳⠦⠶⠞⢋⣍⠉⢳⡄⠈⣧
+⢹⣆⡂⢀⣿⠀⠀⡀⢴⣟⠁⠀⢀⣠⣘⢳⡖⠀⠀⣀⣠⡴⠞⠋⣽⠷⢠⠇⠀⣼
+⠀⢻⡀⢸⣿⣷⢦⣄⣀⣈⣳⣆⣀⣀⣤⣭⣴⠚⠛⠉⣹⣧⡴⣾⠋⠀⠀⣘⡼⠃
+⠀⢸⡇⢸⣷⣿⣤⣏⣉⣙⣏⣉⣹⣁⣀⣠⣼⣶⡾⠟⢻⣇⡼⠁⠀⠀⣰⠋⠀⠀
+⠀⢸⡇⠸⣿⡿⣿⢿⡿⢿⣿⠿⠿⣿⠛⠉⠉⢧⠀⣠⡴⠋⠀⠀⠀⣠⠇⠀⠀⠀
+⠀⢸⠀⠀⠹⢯⣽⣆⣷⣀⣻⣀⣀⣿⣄⣤⣴⠾⢛⡉⢄⡢⢔⣠⠞⠁⠀⠀⠀⠀
+⠀⢸⠀⠀⠀⠢⣀⠀⠈⠉⠉⠉⠉⣉⣀⠠⣐⠦⠑⣊⡥⠞⠋⠀⠀⠀⠀⠀⠀⠀
+⠀⢸⡀⠀⠁⠂⠀⠀⠀⠀⠀⠀⠒⠈⠁⣀⡤⠞⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠙⠶⢤⣤⣤⣤⣤⡤⠴⠖⠚⠛⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+`;
+      const stats = `
+| OS: Temple OS 
+| Memory: I forgot
+| GPU: found in a dumpster   
+| PSU: uranium fuel rods 
+| STORAGE: 3.4 YB 
+| Current Internal Temp: 13769°F
+| Global Cordintates: 38° 54' 0.18'' N 77° 2' 34.764'' W
+`;
+
+      const neofetchOutput = `
+<div style="display: flex;">
+    <pre style="flex: 1;">${asciiArt}</pre>
+    <pre style="flex: 2;">${stats}</pre>
+</div>
+`;
+
+      output.innerHTML += `${neofetchOutput}\n`;
+    }
+
+
+    function whoamiCommand() {
+      output.innerHTML += 'Below Avrage ScriptKitty \n';
+    }
+
+    // Initialize the prompt
+    updatePrompt();
+
+    input.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        const command = input.value.trim();
+        const [cmd, arg] = command.split(' ');
+
+        output.innerHTML += `sysadmin@fbi.gov:~${currentDirectory}$ ${command}\n`;
+
+        if (cmd === 'help') {
+          output.innerHTML += ' clear (clears console)\n ls (lists files in current working directory)\n cat (outputs the contents of a file) \n neofetch (its neofetch) \n whoami (literaly obvious) \n not full command list remember that its bare bones \n \n';
+        } else if (cmd === 'clear') {
+          clearTerminal();
+        } else if (cmd === 'ls') {
+          listFiles();
+        } else if (cmd === 'cat') {
+          if (arg) {
+            if (directoryStructure[currentDirectory].includes(arg)) {
+              if (directoryStructure[arg + '/']) {
+                output.innerHTML += `cat: ${arg}: Is a directory\n`;
+              } else {
+                catFile(arg);
+              }
+            } else {
+              output.innerHTML += `cat: ${arg}: No such file or directory\n`;
+            }
+          } else {
+            output.innerHTML += 'cat: missing argument\n';
+          }
+        } else if (cmd === 'cd') {
+          if (arg) {
+            changeDirectory(arg);
+          } else {
+            output.innerHTML += 'cd: missing argument\n';
+          }
+        } else if (cmd === 'neofetch') {
+          neofetchCommand();
+        } else if (cmd === 'whoami') {
+          whoamiCommand();
+        } else {
+          output.innerHTML += `Command not found: ${command}\n`;
+        }
+
+        input.value = '';
+        terminal.scrollTop = terminal.scrollHeight;
+      }
+    });
+  </script>
+</body>
+
+</html>
+
+
+
